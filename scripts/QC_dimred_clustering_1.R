@@ -139,7 +139,7 @@ top10 <-  markers %>%
          ungroup()
 
 early <- c("SOX2", "PAX6", "NEUROG2", "NEUROD1", "GFAP", "FABP7", "PTPRZ1", "EMX2", "HES1", "HOPX", "HES6", "PROM1", "LIFR", "ASCL1", "DCX", "GAD1", "SLC17A6","GLI3", "EGFR", "OLIG2")
-
+neuron <- c("MAP2", "DCX", "STMN2","SLC17A7", "GAD1", "GAD2", "PROX1", "GRIK4","SLC17A6") # mostly hippocampal and thalamic neurons
 
 ## Plot results and save
 FeaturePlot(project1, features=c("nCount_RNA", "nFeature_RNA", "percent_mito", "percent_oxphos", "percent_apop", "percent_dna_repair","percent_ieg", "percent_top50", "G2M.Score"), cols=c("grey100", "firebrick"))
@@ -151,3 +151,17 @@ DimPlot_scCustom(project1, split_seurat = T, split.by = "Condition", figure_plot
 write.xlsx(top10, "./sertraline/QC/Top10_cluster_markers_res4.xlsx")
 
 saveRDS(project1, "./sertraline/181024_SSRI_processed_object.rds")
+
+
+
+
+####### Cell type Annotation ########
+
+## Load the processed object
+project <- readRDS("./sertraline/181024_SSRI_processed_object.rds")
+levels(project)
+
+project <- RenameIdents(project, '0'= "apical RG", '1'="Astroglia", '2'="oRG", '3'= "RG", '4'="Neurons-1",'5'="undefined", '6'="Glioblast", '7'="Cycling RG", '8'="Neurons-2",'9'="Neuroepithelial")
+
+project$celltype <- Idents(project)
+DimPlot_scCustom(project1, label = T)
