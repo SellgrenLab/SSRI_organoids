@@ -11,6 +11,9 @@ library(scCustomize)
 library(presto)
 library(DElegate)
 library(openxlsx)
+library(fgsea)
+library(msigdbr)
+library(ggplot2)
 
 setwd("/Volumes/projects/C3_Sellgren_lab/Lab Members/Susmita/Internal data/CMV & SSRI/scRNAseq/SSRI/SSRI")
 
@@ -165,3 +168,79 @@ project <- RenameIdents(project, '0'= "apical RG", '1'="Astroglia", '2'="oRG", '
 
 project$celltype <- Idents(project)
 DimPlot_scCustom(project1, label = T)
+
+### Check QC for clustering
+project@meta.data %>%
+ggplot(aes(x=Condition, fill=Condition)) +
+geom_bar() +
+theme_classic() + viridis::scale_fill_viridis(discrete=T)+
+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
+theme(plot.title = element_text(hjust=0.5, face="bold")) +
+ggtitle("NCells")
+
+QC_Plots_UMIs(seurat_object = project, low_cutoff = 2000, high_cutoff = 100000, plot_median = T)
+QC_Plots_Genes(seurat_object = project, low_cutoff = 2000, high_cutoff = 12000, plot_median = T)
+QC_Plots_Complexity(seurat_object = project, high_cutoff = 0.8, plot_median = T)
+
+project@meta.data %>%
+ggplot(aes(x=nCount_RNA, y=nFeature_RNA, color=percent_mito)) +
+geom_point() +
+scale_colour_gradient(low = "gray90", high = "forestgreen") +
+stat_smooth(method=lm) +
+scale_x_log10() +
+scale_y_log10() +
+theme_classic() +
+geom_vline(xintercept = 1000) +
+geom_hline(yintercept = 250) +
+facet_wrap(~celltype)
+
+####### Stricter thresholding for cell type identification ########
+
+project1 <- subset(project, subset = nFeature_RNA > 1000  &
+nCount_RNA > 2000 &
+percent_mito < 10)
+project1 <- SCTransform(project1, vars.to.regress = c("percent_mito"))
+project1 <- RunPCA(project1)
+project1 <- RunUMAP(object = project1,dims=1:30)
+project1<-RunHarmony(project1,"Condition", plot_convergence = TRUE,dims.use = 1:30)
+project1 <- RunUMAP(object = project1, reduction = "harmony",dims=1:30)
+UMAPPlot(project1, group.by="celltype", cols= colors_dutch)
+project1 <- FindNeighbors(project1, reduction = "harmony", dims = 1:30)
+project1 <- FindClusters(resolution = c(0.5), project1)
+
+
+
+####### Neuron subclustering ########
+
+
+neurons <- subset(project, subset=celltype%in%c("Neurons-1", "Neurons-2"))
+neurons <- SCTransform(neurons, vars.to.regress= c("percent_mito"))
+neurons <- RunPCA(neurons)
+neurons <- RunUMAP(neurons, dims=1:30)
+UMAPPlot(neurons,group.by="Condition")
+neurons <- FindNeighbors(neurons, dims = 1:30)
+neurons <- FindClusters(resolution = c(0.2), neurons)
+neuron_markers <- DElegate::findDE(neurons, method = 'deseq', replicate_column = 'assignment')
+FeaturePlot_scCustom(neurons, reduction = "umap", features = c("MAP2", "DCX", "STMN2", "GAD1", "GAD2", "PROX1","CALB1", "GRIK4","SLC17A6"), figure_plot = T)
+neurons <- RenameIdents(neurons, '0'='Excitatory (Mature)', '1'= 'Excitatory (newborn)', '2'='Inhibitory', '3' = 'stressed', '4' = 'oRG-derived')
+neurons$subtypes <- Idents(neurons)
+DimPlot_scCustom(neurons, figure_plot=T, label.box = T, colors_use= DiscretePalette_scCustomize(num_colors = 5, palette = "alphabet2"))
+FeaturePlot(neurons, features=c( "percent_oxphos"), cols=c("grey100", "firebrick"))
+saveRDS(neurons,"./sertraline/201024_SSRI_neurons_subclusters.rds")
+
+
+
+####### Final Annotations for downstream processing ########
+
+
+project1$types <- project1$celltype
+project1$types <- as.character(project1$types)
+project1$types <- ifelse(project1$SCT_snn_res.0.5=='10', "IPC", project1$types) # had clearer expression of IPC markers
+
+neurons$subtypes <- as.character(neurons$subtypes)
+project1$types <- ifelse(rownames(project1@meta.data)%in%rownames(neurons@meta.data), neurons$subtypes[match(rownames(project1@meta.data), rownames(neurons@meta.data))], project1$types)
+
+DimPlot_scCustom(project1, figure_plot=T, label.box = T, colors_use= DiscretePalette_scCustomize(num_colors = 20, palette = "alphabet2"), group.by="types")
+
+
+saveRDS(project1, "./sertraline/201024_SSRI_final_annotations.rds")
