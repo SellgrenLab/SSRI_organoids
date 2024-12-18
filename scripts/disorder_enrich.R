@@ -4,7 +4,6 @@ library(dplyr)
 
 Geneset_with_disease_riskgenes <- readRDS("/Volumes/projects/C3_Sellgren_lab/Lab Members/Susmita/Internal data/C1Q/data/Geneset_with_disease_riskgenes.rds")
 Trubetskoy_scz_genes <- readRDS("/Volumes/projects/C3_Sellgren_lab/Lab Members/Susmita/Internal data/C1Q/Bipolar/Trubetskoy_scz_genes.rds")
-adhd <- c("PTPRF", "KDM4A", "SNRK", "ANO10", "ABHD5", "TRAIP", "CAMKV", "MST1R", "MON1A", "IQCF3", "IQCF2", "IQCF5", "IQCF1", "FOXP1", "VGLL3", "LSM6", "SLC10A7", "COL19A1", "FOXP2", "ARHGAP39", "SORCS3", "METTL15", "DUSP6", "POC1B", "CDH8", "TMEM200C", "DCC", "XRN2", "NKX2-4")
 asd<-  readRDS("/Volumes/projects/C3_Sellgren_lab/Lab Members/Susmita/Internal data/C1Q/Bipolar/ASD_riskgenes.rds") #https://doi-org.proxy.kib.ki.se/10.1073/pnas.2215632120
 adhd<-  readRDS("/Volumes/projects/C3_Sellgren_lab/Lab Members/Susmita/Internal data/C1Q/Bipolar/ADHD_riskgenes.rds") #demontis et al
 mdd<- read.xlsx("/Users/susmita.malwade/MDD.xlsx") #https://www-nature-com.proxy.kib.ki.se/articles/s41588-023-01596-4
