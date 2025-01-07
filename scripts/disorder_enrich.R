@@ -60,3 +60,20 @@ plot2<- ggplot(data= df1, mapping = aes(x=plot, y=Disorder, fill=OR)) + geom_bar
 
 
 cowplot::plot_grid(plot1,plot2,ncol = 1)
+
+
+
+#### p cutoff set to 0.01 for degs as well
+
+df1$pval <- c(0.04,9.8e-04, 0.26, 2.8e-03,4e-06,0.12, 2.2e-05,0.015 )
+df1$OR <- c(6.6,9.8, 3.4, 11.5,8.1,8.4, 7.6, 6.1 )
+df1$padj <- p.adjust(df1$pval, method = "BH")
+df1$plot <- -log10(df1$padj)
+
+ggplot(data = df1, mapping = aes(x = plot, y = Disorder, fill = OR)) +
+    geom_bar(stat = "identity") +
+    scale_fill_viridis() +
+    xlab(label = "-log(p-adjusted)") +
+    theme_classic() +
+    geom_vline(xintercept = -log10(0.01)) +
+    ggtitle(label = "Disorder risk enrichment in DEGs (p<0.01)")
