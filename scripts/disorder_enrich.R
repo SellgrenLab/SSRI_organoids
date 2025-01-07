@@ -64,6 +64,7 @@ cowplot::plot_grid(plot1,plot2,ncol = 1)
 
 
 #### p cutoff set to 0.01 for degs as well
+results_df_sig <- dplyr::filter(results_de, padj < 0.01)
 
 df1$pval <- c(0.04,9.8e-04, 0.26, 2.8e-03,4e-06,0.12, 2.2e-05,0.015 )
 df1$OR <- c(6.6,9.8, 3.4, 11.5,8.1,8.4, 7.6, 6.1 )
