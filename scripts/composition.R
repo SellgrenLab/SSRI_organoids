@@ -6,7 +6,7 @@ sample.groups <- c(rep("Control", 4), rep("Sertraline", 4))
 names(sample.groups) <- c("C0", "C1", "C2", "C3", "S0", "S1", "S2", "S3")
 project$replicate <- NA
 for(i in 1:length(project$Condition)){ project$replicate[i] <- ifelse(project$Condition[i]=="ctrl", paste0("C", project$assignment[i]), paste0("S", project$assignment[i])) }
-cell.groups <- project$celltype
+cell.groups <- project$types #celltype
 names(cell.groups) <- rownames(project@meta.data)
 sample.per.cell <- project$replicate
 names(sample.per.cell) <- rownames(project@meta.data)
