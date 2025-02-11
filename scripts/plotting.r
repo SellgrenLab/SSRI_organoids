@@ -118,3 +118,20 @@ DimPlot2(
   cols = "Spectral-rev",
   theme = NoAxes())
 ggsave("SSRI_Neurons_DimPlot.pdf", width = 5, height = 5)
+
+
+
+### Other plots ####
+
+DotPlot2(ssri, group = "Condition", color = "group", size = "n", alpha = 0.5, 
+          xlab = "SSRI", ylab = "Group", main = "SSRI by Group")
+
+syn<- c("GRIA2", "GRIA1", "GRIA4", "VAMP2", "CALM2", "DLG2")
+DotPlot2(ssri, features=syn, group.by="types", split.by="Condition", color_scheme = "BuRd")
+
+
+VlnPlot2(ssri , features = syn, group.by = "types", split.by = "Condition", cells=colnames(ssri)[ssri$types %in% c("Excitatory (Mature)", "Excitatory (newborn)", "Inhibitory")], stat.method = "wilcox.test", 
+         hide.ns = TRUE)
+ggsave("ssri_synaptic genes in neurons.pdf", width = 10, height = 10)
+
+
