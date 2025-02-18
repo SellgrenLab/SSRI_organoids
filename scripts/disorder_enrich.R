@@ -86,8 +86,11 @@ ggplot(data = df1, mapping = aes(x = plot, y = Disorder, fill = OR)) +
 
 #### New plotting
 bd<-readRDS("/Volumes/projects/C3_Sellgren_lab/Lab Members/Susmita/Internal data/C1Q/Bipolar/Bipolar_risk_genes_with BD1.rds")
-
-hic <- Geneset_with_disease_riskgenes$SCZ_HiC$`High-confident Hi-C defined Schizophrenia risk genes`
+id<- read.xlsx("/Users/susmita.malwade/ID_genes.xlsx")
+SFARI <- read.csv("https://raw.githubusercontent.com/mmkim1210/gene-list/main/list/SFARI-Gene_genes_01-13-2021release_02-05-2021export.csv")
+SFARI <- filter(SFARI, `gene.score` == 1 | syndromic == 1)
+nrow(SFARI)  # 328 genes
+#hic <- Geneset_with_disease_riskgenes$SCZ_HiC$`High-confident Hi-C defined Schizophrenia risk genes`
 schema <- c("SET1DA", "CUL1", "XPO7", "TRIO", "CACNA1G", "SP4", "GRIA3", "GRIN2A", "HERC1", "RB1CC1")
 cross_disorder<- read.xlsx("/Users/susmita.malwade/Crossdisorder.xlsx")
 ## Genes from the DE analysis
@@ -98,6 +101,7 @@ pvalues <- c(
     testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = mdd$Gene.Name))@pval,
     testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = adhd))@pval,
     testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = asd))@pval,
+    testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = SFARI$gene.symbol))@pval,
     testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = Geneset_with_disease_riskgenes$ASD_Ruzzo$`HGNC gene symbol`))@pval,
     testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = Geneset_with_disease_riskgenes$ASD_Sanders$RefSeqGeneName))@pval,
     testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = Geneset_with_disease_riskgenes$ASD_Satterstrom$Gene))@pval,
@@ -106,7 +110,8 @@ pvalues <- c(
     testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = Trubetskoy_scz_genes$all_scz_trubetskoy))@pval,
     testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = schema))@pval,
     testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = cross_disorder$Gene.updated.to.2025))@pval,
-    testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = bd[[2]]))@pval
+    testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = bd[[2]]))@pval,
+    testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = id$SYMBOL))@pval
     #testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = hic))@pval
     #testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = asd))@pval
 )
@@ -115,6 +120,7 @@ odds_ratios <- c(
     testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = mdd$Gene.Name))@odds.ratio,
     testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = adhd))@odds.ratio,
     testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = asd))@odds.ratio,
+    testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = SFARI$gene.symbol))@odds.ratio,
     testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = Geneset_with_disease_riskgenes$ASD_Ruzzo$`HGNC gene symbol`))@odds.ratio,
     testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = Geneset_with_disease_riskgenes$ASD_Sanders$RefSeqGeneName))@odds.ratio,
     testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = Geneset_with_disease_riskgenes$ASD_Satterstrom$Gene))@odds.ratio,
@@ -123,7 +129,8 @@ odds_ratios <- c(
     testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = Trubetskoy_scz_genes$all_scz_trubetskoy))@odds.ratio,
     testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = schema))@odds.ratio,
     testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = cross_disorder$Gene.updated.to.2025))@odds.ratio,
-    testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = bd[[2]]))@odds.ratio
+    testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = bd[[2]]))@odds.ratio,
+    testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = id$SYMBOL))@odds.ratio
     #testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = hic))@odds.ratio
     #testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = asd))@odds.ratio
 )
@@ -132,7 +139,7 @@ odds_ratios <- c(
 adjusted_pvalues <- p.adjust(pvalues, method = "BH")
 
 # Create a data frame for plotting
-test_names <- c("MDD", "ADHD", "ASD Cirnigliaro", "ASD Ruzzo", "ASD Sanders", "ASD Satterstrom", "SCZ Prioritized (Trub)", "SCZ All (Trub)", "SCZ-rare Schema", "Cross Disorder", "BD")
+test_names <- c("MDD", "ADHD", "ASD Cirnigliaro","ASD Syndromic SFARI", "ASD Ruzzo", "ASD Sanders", "ASD Satterstrom", "SCZ Prioritized (Trub)", "SCZ All (Trub)", "SCZ-rare Schema", "Cross Disorder", "BD", "ID")
 pvalue_df <- data.frame(Test = test_names, AdjustedPValue = adjusted_pvalues, OddsRatio = odds_ratios)
 #pvalue_df <- data.frame(Test = test_names, PValue = pvalues, OddsRatio = odds_ratios)
 
@@ -142,6 +149,7 @@ intersecting_genes <- list(
     MDD = getIntersection(testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = mdd$Gene.Name))),
     ADHD = getIntersection(testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = adhd))),
     `ASD Cirnigliaro` = getIntersection(testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = asd))),
+    `ASD Syndromic SFARI` = getIntersection(testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = SFARI$gene.symbol))),
     `ASD Ruzzo` = getIntersection(testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = Geneset_with_disease_riskgenes$ASD_Ruzzo$`HGNC gene symbol`))),
     `ASD Sanders` = getIntersection(testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = Geneset_with_disease_riskgenes$ASD_Sanders$RefSeqGeneName))),
     `ASD Satterstrom` = getIntersection(testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = Geneset_with_disease_riskgenes$ASD_Satterstrom$Gene))),
@@ -149,7 +157,8 @@ intersecting_genes <- list(
     `SCZ All (Trub)` = getIntersection(testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = Trubetskoy_scz_genes$all_scz_trubetskoy))),
     `SCZ-rare Schema` = getIntersection(testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = schema))),
     `Cross Disorder` = getIntersection(testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = cross_disorder$Gene.updated.to.2025))),
-    BD = getIntersection(testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = bd[[2]])))
+    BD = getIntersection(testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = bd[[2]]))),
+    ID = getIntersection(testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = id$SYMBOL)))
     #`SCZ HiC` = getIntersection(testGeneOverlap(newGeneOverlap(genome.size = 29458, listA = unique(results_df_sig$feature), listB = hic)))
 )
 
@@ -166,5 +175,5 @@ ggplot(pvalue_df, aes(x = Test, y = -log10(AdjustedPValue), fill = OddsRatio)) +
     ggtitle(label = "Disorder risk enrichment in DEGs (p<0.01)") +
     geom_text(aes(label = IntersectingGenes), hjust = 1, size = 3, vjust = 0.5)
 
-ggsave("./Results/Sertraline_DEG_disorder_enrichment_with_genes.pdf", width = 10, height = 5, dpi = 300)
+ggsave("./Results/Sertraline_DEG_disorder_enrichment_with_genes.pdf", width = 10, height = 7, dpi = 300)
 
