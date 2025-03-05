@@ -2,14 +2,12 @@
 ## SSRI project - Pathway Heatmap ##
 library(dplyr)
 library(openxlsx)
-
-
-data <- read.xlsx("SSRI_pathways_selected.xlsx", sheet = 1)
-head(data)
-
-
 library(ggplot2)
 library(reshape2)
+library(pals)
+
+data <- read.xlsx("SSRI_pathways_selected.xlsx", sheet = 1)
+#head(data)
 
 # Reshape the data for heatmap 
 data_melt <- melt(data, id.vars = c("Pathway", "Cell.type", "Group"), measure.vars = "NES")
@@ -36,7 +34,7 @@ ggplot(data_cast, aes(x = Cell.type, y = Pathway, fill = NES)) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
         labs(title = "Pathway Heatmap", x = "Cell Type", y = "Pathway", fill = "NES")
 
-library(pals)   
+   
 pal.bands(ocean.balance, ocean.delta, ocean.curl, main = "cmocean")   
 # Create the heatmap with ocean.curl color scale
 ggplot(data_cast, aes(x = Cell.type, y = Pathway, fill = NES)) +

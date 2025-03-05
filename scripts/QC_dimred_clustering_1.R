@@ -164,7 +164,7 @@ saveRDS(project1, "./sertraline/181024_SSRI_processed_object.rds")
 project <- readRDS("./sertraline/181024_SSRI_processed_object.rds")
 levels(project)
 
-project <- RenameIdents(project, '0'= "apical RG", '1'="Astroglia", '2'="oRG", '3'= "RG", '4'="Neurons-1",'5'="undefined", '6'="Glioblast", '7'="Cycling RG", '8'="Neurons-2",'9'="Neuroepithelial")
+project <- RenameIdents(project, '0'= "apical RG", '1'="Astroglia", '2'="oRG", '3'= "RG", '4'="Neurons-1",'5'="undefined", '6'="Glioblast", '7'="Cycling RG", '8'="Neurons-2",'9'="Vascular")
 
 project$celltype <- Idents(project)
 DimPlot_scCustom(project1, label = T)

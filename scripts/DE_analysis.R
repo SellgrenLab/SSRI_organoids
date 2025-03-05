@@ -1,4 +1,17 @@
 ########### Pseudobulk analysis ###########
+library(DElegate)
+library(dplyr)
+library(readxl)
+library(UpSetR)
+library(msigdbr)
+library(fgsea)
+library(openxlsx)
+library(magrittr)
+library(enrichR)
+
+project1 <- readRDS("./sertraline/201024_SSRI_final_annotations.rds")
+
+celltype <- unique(project1$types)
 
 DefaultAssay(project1) <- "RNA"
 results <- list()
@@ -88,7 +101,7 @@ for (i in 1:length(results_pathway)) {
 saveWorkbook(wb, file = "SSRI_pathway_results.xlsx")
 
 ## Overrepresentation analysis
-library(enrichR)    
+    
 # Define the databases to use for enrichment analysis
 dbs <- c("GO_Biological_Process_2021", "KEGG_2021_Human")
 

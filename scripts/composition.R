@@ -2,6 +2,8 @@ library(Seurat)
 library(cacoa)
 library(ggplot2)
 
+project <- readRDS("./sertraline/201024_SSRI_final_annotations.rds")
+
 sample.groups <- c(rep("Control", 4), rep("Sertraline", 4))
 names(sample.groups) <- c("C0", "C1", "C2", "C3", "S0", "S1", "S2", "S3")
 project$replicate <- NA
@@ -27,7 +29,8 @@ cao$plotCellLoadings(show.pvals=FALSE)
 cao$plotExpressionShiftMagnitudes()
 
 
-######
+###### check with another tool ###
+#didn't run it for now
 
 library(miloR)
 embryo_milo <- Milo(as.SingleCellExperiment(project))
