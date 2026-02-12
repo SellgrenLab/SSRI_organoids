@@ -15,7 +15,6 @@ library(fgsea)
 library(msigdbr)
 library(ggplot2)
 
-setwd("/Volumes/projects/C3_Sellgren_lab/Lab Members/Susmita/Internal data/CMV & SSRI/scRNAseq/SSRI/SSRI")
 
 ## Read in cleaned count  matrices from CellBender output
 ctrl<- scCustomize::Read_CellBender_h5_Mat(file_name = "./sertraline/Control_ssri_bender_output_filtered.h5")
