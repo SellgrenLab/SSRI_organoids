@@ -44,9 +44,9 @@ ARID1B is a chromatin regulator, not a Transcritption Factor. ARID1B does not ac
 ```{r load, include=FALSE}
 data(dorothea_hs, package="dorothea")
 #regulons_df <- dorothea_hs %>% filter(confidence %in% c("A","B","C","D","E")) %>% select(tf, target, mor)
-regulons_df <- readRDS("/Users/susmita.malwade/regulons_df.rds")
+regulons_df <- readRDS("./regulons_df.rds")
 regulons_list <- dorothea::df2regulon(regulons_df)
-seurat_obj <- readRDS("/Volumes/projects/C3_Sellgren_lab/Lab Members/Susmita/Internal data/CMV & SSRI/scRNAseq/SSRI/SSRI/sertraline/ssri_recent.rds")
+seurat_obj <- readRDS("./sertraline/ssri_recent.rds")
 DefaultAssay(seurat_obj) <- "RNA"
 expr_mat <- GetAssayData(seurat_obj, slot="data")
 targets <- unique(unlist(lapply(regulons_list, function(x) names(x$tfmode))))
@@ -54,7 +54,7 @@ expr_mat <- expr_mat[intersect(rownames(expr_mat), targets), ]
 expr_mat <- as.matrix(expr_mat)
 storage.mode(expr_mat) <- "numeric"
 expr_mat[is.na(expr_mat)] <- 0
-tf_activities <- readRDS("/Users/susmita.malwade/ssri_tf_activities.rds")
+tf_activities <- readRDS("./ssri_tf_activities.rds")
 seurat_obj[["TF_activity"]] <- CreateAssayObject(tf_activities)
 
 ```
@@ -74,7 +74,7 @@ ct <- "RG"  # change as needed
 cells_ct <- WhichCells(seurat_obj, expression = new_types == ct)
 seurat_ct <- subset(seurat_obj, cells = cells_ct)
 
-de_all <- openxlsx::read.xlsx("/Volumes/projects/C3_Sellgren_lab/Lab Members/Susmita/Internal data/CMV & SSRI/scRNAseq/SSRI/SSRI/sertraline/201024_SSRI_pseudobulk_results_all.xlsx")
+de_all <- openxlsx::read.xlsx("./sertraline/201024_SSRI_pseudobulk_results_all.xlsx")
 
 de_ct <- de_all %>% filter(celltype == ct, padj < 0.05)
 up_genes   <- de_ct %>% filter(log_fc > 0) %>% arrange(desc(log_fc)) %>% pull(feature) %>% head(200)
