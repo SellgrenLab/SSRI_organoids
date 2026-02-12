@@ -1,6 +1,6 @@
 # SSRI Organoids – Single-Cell Analysis of Sertraline Exposure
 
-**Repository:** https://github.com/SellgrenLab/SSRI_organoids  
+**Research Article:** (add link to paper once published)  
 **Project:** Single-cell RNA sequencing analysis of human brain organoids exposed to sertraline (SSRI)
 
 ---
