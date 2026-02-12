@@ -12,10 +12,8 @@ This repository contains analysis workflows and scripts used to study the effect
 
 ## 📁 Repository Structure
 1_QC_dimred_clustering.R
-
-- Quality control and filtering
-- Normalization and scaling
-- Dimensionality reduction (PCA, UMAP)
+- Quality control 
+- Dimensionality reduction 
 - Cell type annotation
 
 2_DE_analysis.R
@@ -35,7 +33,7 @@ This repository contains analysis workflows and scripts used to study the effect
 6_disorder_enrich.R
 - Overlap analysis with curated disorder gene sets
 
-📫 Contact
+Contact
 Sellgren Lab (carl.sellgren@ki.se)
 Applied Developmental Neurobiology
 Karolinska Institute, Sweden
